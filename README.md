@@ -1,112 +1,189 @@
+<div align="center">
+
 # pkgmanager
 
-A unified package manager for your dotfiles. Manage packages across multiple package managers with a single YAML manifest.
+**One manifest to rule them all.**
+
+A unified CLI that manages packages across Homebrew, Cargo, uv, Bun, and more — all from a single YAML file.
+
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
+---
+
+## Why pkgmanager?
+
+Setting up a new machine means running `brew install`, `cargo install`, `uv tool install`, and more — each with their own syntax and state. **pkgmanager** consolidates everything into one manifest:
+
+```yaml
+general:
+  brew:
+    - ripgrep
+    - fzf
+  python:
+    - ruff
+    - pyright
+  rust:
+    - miniserve
+```
+
+Then sync everywhere with one command:
+
+```bash
+pkgmanager sync
+```
+
+---
+
+## Features
+
+- **Single manifest** — Track all packages in `~/.config/packages.yaml`
+- **Cross-platform** — macOS, Linux, and WSL support with platform-specific sections
+- **Smart syncing** — Only installs what's missing, skips what's already there
+- **Fallback syntax** — Define preferred managers with automatic fallbacks (`tmux:brew`)
+- **Custom packages** — Shell script-based installs for anything else
+- **Beautiful output** — Rich terminal UI with progress and status
+
+---
 
 ## Supported Package Managers
 
-| Type | Tool | Platform |
-|------|------|----------|
-| `brew` | Homebrew formulae | macOS |
-| `cask` | Homebrew casks | macOS |
-| `mas` | Mac App Store | macOS |
-| `conda` | micromamba | All |
-| `python` | uv | All |
-| `rust` | cargo | All |
-| `bun` | bun | All |
-| `winget` | winget.exe | WSL |
-| `custom` | shell scripts | All |
+| Type | Tool | Platform | Description |
+|:-----|:-----|:---------|:------------|
+| `brew` | Homebrew | macOS | CLI tools and formulae |
+| `cask` | Homebrew Cask | macOS | GUI applications |
+| `mas` | Mac App Store | macOS | App Store apps (by ID) |
+| `conda` | micromamba | All | Conda packages |
+| `python` | uv | All | Python CLI tools |
+| `rust` | cargo | All | Rust binaries |
+| `bun` | bun | All | JavaScript/TypeScript tools |
+| `winget` | winget.exe | WSL | Windows packages from WSL |
+| `custom` | shell scripts | All | Custom installation scripts |
+
+---
 
 ## Installation
 
 ```bash
+# Using uv (recommended)
 uv tool install pkgmanager
+
+# Or from source
+git clone https://github.com/JiwanChung/pkgmanager
+cd pkgmanager
+uv tool install .
 ```
+
+---
+
+## Quick Start
+
+### 1. Create a manifest
+
+```bash
+mkdir -p ~/.config
+cat > ~/.config/packages.yaml << 'EOF'
+general:
+  brew:
+    - ripgrep
+    - fzf
+    - jq
+  python:
+    - ruff
+    - black
+  rust:
+    - bat
+    - eza
+EOF
+```
+
+### 2. Sync packages
+
+```bash
+pkgmanager sync
+```
+
+### 3. Add more packages
+
+```bash
+pkgmanager install brew fd
+pkgmanager install python poetry
+pkgmanager install cask raycast
+```
+
+---
 
 ## Usage
 
-### Bootstrap package managers
-
-Install the package managers themselves:
+### Sync from manifest
 
 ```bash
-pkgmanager bootstrap           # Install all missing managers
-pkgmanager bootstrap bun       # Install just bun
-pkgmanager bootstrap python    # Install uv
-pkgmanager bootstrap rust      # Install rustup
-```
-
-### Sync packages from manifest
-
-```bash
-pkgmanager init                # Install all packages from manifest
-pkgmanager sync                # Alias for init
+pkgmanager sync                    # Install all packages
+pkgmanager sync --types brew,rust  # Install specific types only
+pkgmanager sync --dry-run          # Preview what would be installed
 ```
 
 ### Install packages
 
 ```bash
-pkgmanager install brew ripgrep
-pkgmanager install cask raycast
-pkgmanager install mas 937984704
-pkgmanager install conda numpy
-pkgmanager install python ruff
-pkgmanager install rust miniserve
-pkgmanager install bun typescript
+pkgmanager install brew ripgrep    # Homebrew formula
+pkgmanager install cask raycast    # Homebrew cask (GUI app)
+pkgmanager install mas 937984704   # Mac App Store (by ID)
+pkgmanager install python ruff     # Python tool via uv
+pkgmanager install rust miniserve  # Rust binary via cargo
+pkgmanager install bun typescript  # Bun global package
 ```
 
 ### Remove packages
 
 ```bash
-pkgmanager remove ripgrep
+pkgmanager remove ripgrep          # Auto-detects type
 pkgmanager remove ruff --type python
 ```
 
 ### Update packages
 
 ```bash
-pkgmanager update              # Update all packages
-pkgmanager update ruff         # Update specific package
+pkgmanager update                  # Update all
+pkgmanager update ruff             # Update specific package
 ```
 
-### List and status
+### List & status
 
 ```bash
-pkgmanager list                # List tracked packages
-pkgmanager list -v             # Include untracked installed packages
-pkgmanager status              # Show manager availability
-pkgmanager show ruff           # Show package details
+pkgmanager list                    # Show tracked packages
+pkgmanager list -v                 # Include untracked installed packages
+pkgmanager status                  # Show manager availability
+pkgmanager show ruff               # Detailed package info
 ```
 
-### Edit manifest
+### Bootstrap managers
 
 ```bash
-pkgmanager edit                # Open manifest in $EDITOR
+pkgmanager bootstrap               # Install all missing managers
+pkgmanager bootstrap bun           # Install just bun
+pkgmanager bootstrap rust          # Install rustup
 ```
+
+---
 
 ## Manifest Format
 
-The default manifest path is `~/.config/packages.yaml`. Override with `--env` or `$PACKAGE_CONFIG`:
-
-```bash
-pkgmanager list --env ~/dotfiles/packages.yaml
-# or
-export PACKAGE_CONFIG=~/dotfiles/packages.yaml
-```
-
-Example manifest:
+The manifest lives at `~/.config/packages.yaml` (override with `$PACKAGE_CONFIG`):
 
 ```yaml
 # macOS-specific packages
 mac:
   brew:
-    - ripgrep
-    - fzf
-    - jq
+    - infisical
+    - mackup
   cask:
     - raycast
-    - iterm2
+    - ghostty
   mas:
-    - 937984704  # Amphetamine
+    - '937984704'  # Amphetamine
 
 # Cross-platform packages
 general:
@@ -115,16 +192,17 @@ general:
     - nodejs
   python:
     - ruff
-    - black
+    - pyright
     - poetry
   rust:
     - miniserve
     - bat
+    - eza
   bun:
     - typescript
     - prettier
 
-# WSL-specific packages
+# WSL-specific packages (Windows from Linux)
 wsl:
   winget:
     - Microsoft.PowerToys
@@ -132,12 +210,12 @@ wsl:
 # Custom script-based packages
 custom:
   - fisher
-  - my-tool
+  - my-custom-tool
 ```
 
 ### Platform-specific packages
 
-Use dict format to restrict packages to specific platforms:
+Restrict packages to specific platforms:
 
 ```yaml
 general:
@@ -147,9 +225,22 @@ general:
     - { name: "mac-only-tool", platform: "darwin" }
 ```
 
+### Fallback syntax
+
+Prefer one manager but fall back to another:
+
+```yaml
+general:
+  conda:
+    - python
+    - tmux:brew    # Use brew on macOS, conda elsewhere
+```
+
+---
+
 ## Custom Packages
 
-Define custom packages in `specs.yaml`:
+Define custom packages in a `specs.yaml` bundled with pkgmanager:
 
 ```yaml
 fisher:
@@ -167,7 +258,17 @@ my-tool:
     - curl
 ```
 
+---
+
 ## Environment Variables
 
-- `PACKAGE_CONFIG` - Path to YAML manifest file (default: `~/.config/packages.yaml`)
-- `EDITOR` - Editor for `pkgmanager edit` command
+| Variable | Description | Default |
+|:---------|:------------|:--------|
+| `PACKAGE_CONFIG` | Path to manifest file | `~/.config/packages.yaml` |
+| `EDITOR` | Editor for `pkgmanager edit` | `vim` |
+
+---
+
+## License
+
+MIT
