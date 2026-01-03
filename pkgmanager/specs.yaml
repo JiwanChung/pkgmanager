@@ -19,3 +19,8 @@ yazi-dual-pane:
   remove: rm -rf ~/.config/yazi/plugins/dual-pane.yazi
   description: Dual pane plugin for yazi file manager
   depends: [yazi]
+
+claude-code:
+  install: curl -fsSL https://claude.ai/install.sh | bash
+  check: which claude
+  description: Claude Code CLI from Anthropic
