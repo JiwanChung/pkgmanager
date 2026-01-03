@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+pkgmanager/__init__.py
+pkgmanager/cli.py
+pkgmanager/specs.yaml
+pkgmanager.egg-info/PKG-INFO
+pkgmanager.egg-info/SOURCES.txt
+pkgmanager.egg-info/dependency_links.txt
+pkgmanager.egg-info/entry_points.txt
+pkgmanager.egg-info/requires.txt
+pkgmanager.egg-info/top_level.txt

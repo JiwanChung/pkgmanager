@@ -1,0 +1,183 @@
+Metadata-Version: 2.4
+Name: pkgmanager
+Version: 0.3.2
+Summary: Unified package manager for conda, python (uv), and rust (cargo)
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: PyYAML>=6
+Requires-Dist: cyclopts>=3.20.0
+Requires-Dist: rich>=13.0.0
+
+# pkgmanager
+
+A unified package manager for your dotfiles. Manage packages across multiple package managers with a single YAML manifest.
+
+## Supported Package Managers
+
+| Type | Tool | Platform |
+|------|------|----------|
+| `brew` | Homebrew formulae | macOS |
+| `cask` | Homebrew casks | macOS |
+| `mas` | Mac App Store | macOS |
+| `conda` | micromamba | All |
+| `python` | uv | All |
+| `rust` | cargo | All |
+| `bun` | bun | All |
+| `winget` | winget.exe | WSL |
+| `custom` | shell scripts | All |
+
+## Installation
+
+```bash
+uv tool install pkgmanager
+```
+
+## Usage
+
+### Bootstrap package managers
+
+Install the package managers themselves:
+
+```bash
+pkgmanager bootstrap           # Install all missing managers
+pkgmanager bootstrap bun       # Install just bun
+pkgmanager bootstrap python    # Install uv
+pkgmanager bootstrap rust      # Install rustup
+```
+
+### Sync packages from manifest
+
+```bash
+pkgmanager init                # Install all packages from manifest
+pkgmanager sync                # Alias for init
+```
+
+### Install packages
+
+```bash
+pkgmanager install brew ripgrep
+pkgmanager install cask raycast
+pkgmanager install mas 937984704
+pkgmanager install conda numpy
+pkgmanager install python ruff
+pkgmanager install rust miniserve
+pkgmanager install bun typescript
+```
+
+### Remove packages
+
+```bash
+pkgmanager remove ripgrep
+pkgmanager remove ruff --type python
+```
+
+### Update packages
+
+```bash
+pkgmanager update              # Update all packages
+pkgmanager update ruff         # Update specific package
+```
+
+### List and status
+
+```bash
+pkgmanager list                # List tracked packages
+pkgmanager list -v             # Include untracked installed packages
+pkgmanager status              # Show manager availability
+pkgmanager show ruff           # Show package details
+```
+
+### Edit manifest
+
+```bash
+pkgmanager edit                # Open manifest in $EDITOR
+```
+
+## Manifest Format
+
+The default manifest path is `~/.config/packages.yaml`. Override with `--env` or `$PACKAGE_CONFIG`:
+
+```bash
+pkgmanager list --env ~/dotfiles/packages.yaml
+# or
+export PACKAGE_CONFIG=~/dotfiles/packages.yaml
+```
+
+Example manifest:
+
+```yaml
+# macOS-specific packages
+mac:
+  brew:
+    - ripgrep
+    - fzf
+    - jq
+  cask:
+    - raycast
+    - iterm2
+  mas:
+    - 937984704  # Amphetamine
+
+# Cross-platform packages
+general:
+  conda:
+    - python
+    - nodejs
+  python:
+    - ruff
+    - black
+    - poetry
+  rust:
+    - miniserve
+    - bat
+  bun:
+    - typescript
+    - prettier
+
+# WSL-specific packages
+wsl:
+  winget:
+    - Microsoft.PowerToys
+
+# Custom script-based packages
+custom:
+  - fisher
+  - my-tool
+```
+
+### Platform-specific packages
+
+Use dict format to restrict packages to specific platforms:
+
+```yaml
+general:
+  python:
+    - ruff
+    - { name: "linux-only-tool", platform: "linux" }
+    - { name: "mac-only-tool", platform: "darwin" }
+```
+
+## Custom Packages
+
+Define custom packages in `specs.yaml`:
+
+```yaml
+fisher:
+  description: Fish plugin manager
+  shell: fish
+  check: type -q fisher
+  install: curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+  remove: fisher self-uninstall
+
+my-tool:
+  check: command -v my-tool
+  install: |
+    curl -L https://example.com/install.sh | bash
+  depends:
+    - curl
+```
+
+## Environment Variables
+
+- `PACKAGE_CONFIG` - Path to YAML manifest file (default: `~/.config/packages.yaml`)
+- `EDITOR` - Editor for `pkgmanager edit` command
