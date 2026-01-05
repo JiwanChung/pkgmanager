@@ -6,7 +6,7 @@
 
 A unified CLI that manages packages across Homebrew, Cargo, uv, Go, Bun, and more — all from a single YAML file.
 
-[![CI](https://github.com/JiwanChung/pkgmanager/actions/workflows/ci.yml/badge.svg)](https://github.com/JiwanChung/pkgmanager/actions/workflows/ci.yml)
+[![CI](https://github.com/JiwanChung/onepkg/actions/workflows/ci.yml/badge.svg)](https://github.com/JiwanChung/onepkg/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -81,7 +81,7 @@ onepkg sync
 uv tool install onepkg
 
 # Or from source
-git clone https://github.com/JiwanChung/pkgmanager
+git clone https://github.com/JiwanChung/onepkg
 cd onepkg
 uv tool install .
 ```
@@ -385,7 +385,7 @@ my-tool:
 
 ```bash
 # Clone and install with dev dependencies
-git clone https://github.com/JiwanChung/pkgmanager
+git clone https://github.com/JiwanChung/onepkg
 cd onepkg
 uv pip install -e ".[dev]"
 
