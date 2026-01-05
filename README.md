@@ -1,6 +1,6 @@
 <div align="center">
 
-# pkgmanager
+# onepkg
 
 **One manifest to rule them all.**
 
@@ -14,9 +14,9 @@ A unified CLI that manages packages across Homebrew, Cargo, uv, Go, Bun, and mor
 
 ---
 
-## Why pkgmanager?
+## Why onepkg?
 
-Setting up a new machine means running `brew install`, `cargo install`, `go install`, `uv tool install`, and more — each with their own syntax and state. **pkgmanager** consolidates everything into one manifest:
+Setting up a new machine means running `brew install`, `cargo install`, `go install`, `uv tool install`, and more — each with their own syntax and state. **onepkg** consolidates everything into one manifest:
 
 ```yaml
 general:
@@ -36,7 +36,7 @@ general:
 Then sync everywhere with one command:
 
 ```bash
-pkgmanager sync
+onepkg sync
 ```
 
 ---
@@ -78,11 +78,11 @@ pkgmanager sync
 
 ```bash
 # Using uv (recommended)
-uv tool install pkgmanager
+uv tool install onepkg
 
 # Or from source
 git clone https://github.com/JiwanChung/pkgmanager
-cd pkgmanager
+cd onepkg
 uv tool install .
 ```
 
@@ -90,13 +90,13 @@ uv tool install .
 
 ```bash
 # Bash
-pkgmanager completions bash >> ~/.bashrc
+onepkg completions bash >> ~/.bashrc
 
 # Zsh
-pkgmanager completions zsh >> ~/.zshrc
+onepkg completions zsh >> ~/.zshrc
 
 # Fish
-pkgmanager completions fish > ~/.config/fish/completions/pkgmanager.fish
+onepkg completions fish > ~/.config/fish/completions/onepkg.fish
 ```
 
 ---
@@ -123,15 +123,15 @@ EOF
 ### 2. Sync packages
 
 ```bash
-pkgmanager sync
+onepkg sync
 ```
 
 ### 3. Add more packages
 
 ```bash
-pkgmanager install brew ripgrep
-pkgmanager install python poetry
-pkgmanager install go github.com/charmbracelet/glow
+onepkg install brew ripgrep
+onepkg install python poetry
+onepkg install go github.com/charmbracelet/glow
 ```
 
 ---
@@ -177,41 +177,41 @@ pkgmanager install go github.com/charmbracelet/glow
 ### Sync from manifest
 
 ```bash
-pkgmanager sync                    # Install all packages
-pkgmanager sync --types brew,rust  # Install specific types only
-pkgmanager sync --dry-run          # Preview what would be installed
-pkgmanager sync --quiet            # Suppress non-essential output
-pkgmanager sync --locked           # Install exact versions from lock file
+onepkg sync                    # Install all packages
+onepkg sync --types brew,rust  # Install specific types only
+onepkg sync --dry-run          # Preview what would be installed
+onepkg sync --quiet            # Suppress non-essential output
+onepkg sync --locked           # Install exact versions from lock file
 ```
 
 ### Lock versions
 
 ```bash
-pkgmanager lock                    # Create packages.lock.yaml
-pkgmanager lock --types python     # Lock only specific types
-pkgmanager lock -o deploy.lock.yaml  # Custom output file
+onepkg lock                    # Create packages.lock.yaml
+onepkg lock --types python     # Lock only specific types
+onepkg lock -o deploy.lock.yaml  # Custom output file
 
 # Then install with locked versions on another machine:
-pkgmanager sync --locked
+onepkg sync --locked
 ```
 
 ### Install packages
 
 ```bash
-pkgmanager install brew ripgrep              # Homebrew formula
-pkgmanager install cask raycast              # Homebrew cask (GUI app)
-pkgmanager install mas 937984704             # Mac App Store (by ID)
-pkgmanager install python ruff               # Python tool via uv
-pkgmanager install rust miniserve            # Rust binary via cargo
-pkgmanager install go github.com/junegunn/fzf  # Go binary
-pkgmanager install bun typescript            # Bun global package
-pkgmanager install custom fisher             # Custom script package
+onepkg install brew ripgrep              # Homebrew formula
+onepkg install cask raycast              # Homebrew cask (GUI app)
+onepkg install mas 937984704             # Mac App Store (by ID)
+onepkg install python ruff               # Python tool via uv
+onepkg install rust miniserve            # Rust binary via cargo
+onepkg install go github.com/junegunn/fzf  # Go binary
+onepkg install bun typescript            # Bun global package
+onepkg install custom fisher             # Custom script package
 ```
 
 ### Check differences
 
 ```bash
-pkgmanager diff                    # Show manifest vs installed
+onepkg diff                    # Show manifest vs installed
 # Output:
 # brew
 #   + ripgrep (not installed)
@@ -221,15 +221,15 @@ pkgmanager diff                    # Show manifest vs installed
 ### Export current setup
 
 ```bash
-pkgmanager export > packages.yaml  # Export all to YAML
-pkgmanager export --types brew     # Export only brew packages
-pkgmanager export --format list    # Simple list format
+onepkg export > packages.yaml  # Export all to YAML
+onepkg export --types brew     # Export only brew packages
+onepkg export --format list    # Simple list format
 ```
 
 ### Diagnose issues
 
 ```bash
-pkgmanager doctor
+onepkg doctor
 # Output:
 # ✓ Manifest file exists
 # ✓ brew: brew is available
@@ -241,15 +241,15 @@ pkgmanager doctor
 ### Clean up untracked packages
 
 ```bash
-pkgmanager clean --dry-run         # Preview what would be removed
-pkgmanager clean --types python    # Clean only python packages
+onepkg clean --dry-run         # Preview what would be removed
+onepkg clean --types python    # Clean only python packages
 ```
 
 ### Check for updates
 
 ```bash
-pkgmanager outdated                # Show all outdated packages
-pkgmanager outdated --types brew   # Check only brew
+onepkg outdated                # Show all outdated packages
+onepkg outdated --types brew   # Check only brew
 ```
 
 ---
@@ -329,7 +329,7 @@ general:
 
 ## Custom Packages
 
-Define custom packages in a `specs.yaml` bundled with pkgmanager:
+Define custom packages in a `specs.yaml` bundled with onepkg:
 
 ```yaml
 fisher:
@@ -377,7 +377,7 @@ my-tool:
 | Variable | Description | Default |
 |:---------|:------------|:--------|
 | `PACKAGE_CONFIG` | Path to manifest file | `~/.config/packages.yaml` |
-| `EDITOR` | Editor for `pkgmanager edit` | `vim` |
+| `EDITOR` | Editor for `onepkg edit` | `vim` |
 
 ---
 
@@ -386,14 +386,14 @@ my-tool:
 ```bash
 # Clone and install with dev dependencies
 git clone https://github.com/JiwanChung/pkgmanager
-cd pkgmanager
+cd onepkg
 uv pip install -e ".[dev]"
 
 # Run tests
 uv run pytest tests/ -v
 
 # Check types
-uv run mypy pkgmanager/
+uv run mypy onepkg/
 ```
 
 ---
@@ -401,7 +401,7 @@ uv run mypy pkgmanager/
 ## Project Structure
 
 ```
-pkgmanager/
+onepkg/
 ├── cli.py        # CLI commands (1,279 lines)
 ├── managers.py   # Package manager implementations (1,129 lines)
 ├── manifest.py   # Manifest handling (344 lines)

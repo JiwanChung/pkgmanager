@@ -1,4 +1,4 @@
-"""Manifest file handling for pkgmanager."""
+"""Manifest file handling for onepkg."""
 
 import os
 import sys

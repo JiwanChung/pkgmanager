@@ -3,13 +3,13 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-from pkgmanager.models import (
+from onepkg.models import (
     PackageInfo,
     PackageDetails,
     CommandResult,
     CustomPackageConfig,
 )
-from pkgmanager.managers import (
+from onepkg.managers import (
     BrewManager,
     CaskManager,
     PythonManager,
@@ -106,14 +106,14 @@ class TestBrewManager:
         assert manager.tool == "brew"
         assert manager.color == "bright_yellow"
 
-    @patch("pkgmanager.managers.shutil.which")
+    @patch("onepkg.managers.shutil.which")
     def test_is_available_when_installed(self, mock_which):
         """Manager is available when brew is installed."""
         mock_which.return_value = "/opt/homebrew/bin/brew"
         manager = BrewManager()
         assert manager.is_available() is True
 
-    @patch("pkgmanager.managers.shutil.which")
+    @patch("onepkg.managers.shutil.which")
     def test_is_available_when_not_installed(self, mock_which):
         """Manager is not available when brew is not installed."""
         mock_which.return_value = None
@@ -158,7 +158,7 @@ class TestCustomManager:
         manager = CustomManager()
         assert manager.is_available() is True
 
-    @patch("pkgmanager.managers.subprocess.run")
+    @patch("onepkg.managers.subprocess.run")
     def test_is_installed_with_check_command(self, mock_run):
         """Check if package is installed using check command."""
         mock_run.return_value = MagicMock(returncode=0)
@@ -170,7 +170,7 @@ class TestCustomManager:
         )
         assert manager.is_installed(config) is True
 
-    @patch("pkgmanager.managers.subprocess.run")
+    @patch("onepkg.managers.subprocess.run")
     def test_is_not_installed_when_check_fails(self, mock_run):
         """Package is not installed when check command fails."""
         mock_run.return_value = MagicMock(returncode=1)
@@ -201,7 +201,7 @@ class TestCustomManager:
         )
         assert manager._get_shell(config) == "fish"
 
-    @patch("pkgmanager.managers.detect_shell")
+    @patch("onepkg.managers.detect_shell")
     def test_get_shell_detects_when_not_specified(self, mock_detect):
         """Detect shell when not specified in config."""
         mock_detect.return_value = "/bin/zsh"

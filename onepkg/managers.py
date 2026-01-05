@@ -1049,7 +1049,7 @@ class CustomManager:
 def load_specs() -> dict:
     """Load custom package specs from the bundled specs.yaml"""
     try:
-        specs_file = resources.files("pkgmanager").joinpath("specs.yaml")
+        specs_file = resources.files("onepkg").joinpath("specs.yaml")
         with resources.as_file(specs_file) as path:
             with open(path) as f:
                 return yaml.safe_load(f) or {}

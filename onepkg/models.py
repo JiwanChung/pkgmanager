@@ -1,4 +1,4 @@
-"""Data models for pkgmanager."""
+"""Data models for onepkg."""
 
 from dataclasses import dataclass
 

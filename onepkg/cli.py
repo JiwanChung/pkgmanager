@@ -1,4 +1,4 @@
-"""CLI commands for pkgmanager."""
+"""CLI commands for onepkg."""
 
 import os
 import subprocess
@@ -40,22 +40,22 @@ __version__ = "0.6.0"
 
 # Application setup
 app = App(
-    name="pkgmanager",
+    name="onepkg",
     help_format="rich",
     help="""
-[bold cyan]pkgmanager[/] - Unified package manager for your dotfiles
+[bold cyan]onepkg[/] - Unified package manager for your dotfiles
 
 Manage packages across [bright_yellow]brew[/], [bright_blue]cask[/],
 [bright_cyan]mas[/], [green]conda[/], [yellow]python (uv)[/], [red]rust (cargo)[/],
 [cyan]go[/], [bright_magenta]bun[/], and [cyan]winget (WSL)[/] with a single YAML manifest file.
 
 [dim]Examples:[/]
-  pkgmanager init                    Install all packages from manifest
-  pkgmanager install brew ripgrep    Install a brew formula
-  pkgmanager install go github.com/jesseduffield/lazygit  Install a Go binary
-  pkgmanager list                    List all installed packages
-  pkgmanager diff                    Show manifest vs system differences
-  pkgmanager sync                    Sync packages from manifest
+  onepkg init                    Install all packages from manifest
+  onepkg install brew ripgrep    Install a brew formula
+  onepkg install go github.com/jesseduffield/lazygit  Install a Go binary
+  onepkg list                    List all installed packages
+  onepkg diff                    Show manifest vs system differences
+  onepkg sync                    Sync packages from manifest
 """,
     version=__version__,
 )
@@ -139,11 +139,11 @@ def init(
     configured package manager.
 
     [dim]Examples:[/]
-      pkgmanager init
-      pkgmanager init --env ~/packages.yaml
-      pkgmanager init --types conda,python
-      pkgmanager init --dry-run
-      pkgmanager init --locked        Install exact versions from lock file
+      onepkg init
+      onepkg init --env ~/packages.yaml
+      onepkg init --types conda,python
+      onepkg init --dry-run
+      onepkg init --locked        Install exact versions from lock file
     """
     from pathlib import Path
 
@@ -159,7 +159,7 @@ def init(
 
         if not lock_path.exists():
             console.print(f"[red]Error:[/] Lock file not found: {lock_path}")
-            console.print("[dim]Run 'pkgmanager lock' to create one[/]")
+            console.print("[dim]Run 'onepkg lock' to create one[/]")
             raise SystemExit(1)
 
         with open(lock_path) as f:
@@ -346,9 +346,9 @@ def install(
     Install a package and add it to the manifest.
 
     [dim]Examples:[/]
-      pkgmanager install brew ripgrep
-      pkgmanager install python ruff
-      pkgmanager install go github.com/jesseduffield/lazygit
+      onepkg install brew ripgrep
+      onepkg install python ruff
+      onepkg install go github.com/jesseduffield/lazygit
     """
     data, raw_data, path = load_manifest(env)
 
@@ -453,8 +453,8 @@ def remove(
     Remove a package and update the manifest.
 
     [dim]Examples:[/]
-      pkgmanager remove ripgrep
-      pkgmanager remove raycast --type cask
+      onepkg remove ripgrep
+      onepkg remove raycast --type cask
     """
     data, raw_data, path = load_manifest(env)
 
@@ -525,9 +525,9 @@ def list(
     List tracked packages grouped by category.
 
     [dim]Examples:[/]
-      pkgmanager list
-      pkgmanager list --verbose
-      pkgmanager list --types brew,python
+      onepkg list
+      onepkg list --verbose
+      onepkg list --types brew,python
     """
     data, raw_data, path = load_manifest(env)
     data = resolve_all_packages(data)
@@ -634,9 +634,9 @@ def update(
     Update packages.
 
     [dim]Examples:[/]
-      pkgmanager update           Update all packages
-      pkgmanager update ruff      Update specific package
-      pkgmanager update --type brew  Update all brew packages
+      onepkg update           Update all packages
+      onepkg update ruff      Update specific package
+      onepkg update --type brew  Update all brew packages
     """
     data, raw_data, path = load_manifest(env)
 
@@ -765,8 +765,8 @@ def diff(
     Show differences between manifest and installed packages.
 
     [dim]Examples:[/]
-      pkgmanager diff
-      pkgmanager diff --types brew,cask
+      onepkg diff
+      onepkg diff --types brew,cask
     """
     data, raw_data, path = load_manifest(env)
     data = resolve_all_packages(data)
@@ -845,7 +845,7 @@ def diff(
         console.print(
             Panel(
                 " | ".join(summary_parts)
-                + "\n[dim]Run 'pkgmanager init' to install missing packages[/]",
+                + "\n[dim]Run 'onepkg init' to install missing packages[/]",
                 style="cyan",
             )
         )
@@ -865,9 +865,9 @@ def export(
     Export installed packages to manifest format.
 
     [dim]Examples:[/]
-      pkgmanager export > packages.yaml
-      pkgmanager export --types brew,cask
-      pkgmanager export --format list
+      onepkg export > packages.yaml
+      onepkg export --types brew,cask
+      onepkg export --format list
     """
     filter_types = None
     if types:
@@ -921,8 +921,8 @@ def bootstrap(
     Install package managers themselves.
 
     [dim]Examples:[/]
-      pkgmanager bootstrap
-      pkgmanager bootstrap rust
+      onepkg bootstrap
+      onepkg bootstrap rust
     """
     if dry_run:
         console.print(Panel("[yellow]DRY RUN[/] - No changes will be made", style="yellow"))
@@ -968,8 +968,8 @@ def show(
     Show detailed information about a package.
 
     [dim]Examples:[/]
-      pkgmanager show ruff
-      pkgmanager show miniserve --type rust
+      onepkg show ruff
+      onepkg show miniserve --type rust
     """
     data, raw_data, path = load_manifest(env)
 
@@ -1060,8 +1060,8 @@ def search(
     Search for packages across package managers.
 
     [dim]Examples:[/]
-      pkgmanager search ripgrep
-      pkgmanager search python --types brew,conda
+      onepkg search ripgrep
+      onepkg search python --types brew,conda
     """
     filter_types = None
     if types:
@@ -1303,8 +1303,8 @@ def clean(
     Remove packages not in the manifest (untracked packages).
 
     [dim]Examples:[/]
-      pkgmanager clean --dry-run
-      pkgmanager clean --types python
+      onepkg clean --dry-run
+      onepkg clean --types python
     """
     data, raw_data, path = load_manifest(env)
     data = resolve_all_packages(data)
@@ -1399,9 +1399,9 @@ def lock(
     your manifest, creating a reproducible snapshot for deployment.
 
     [dim]Examples:[/]
-      pkgmanager lock                     Create packages.lock.yaml
-      pkgmanager lock -o my.lock.yaml     Custom output file
-      pkgmanager lock --types python,rust Lock only specific types
+      onepkg lock                     Create packages.lock.yaml
+      onepkg lock -o my.lock.yaml     Custom output file
+      onepkg lock --types python,rust Lock only specific types
     """
     from pathlib import Path
 
@@ -1456,7 +1456,7 @@ def lock(
 
     # Write lock file
     with open(lock_path, "w") as f:
-        f.write("# pkgmanager lock file - DO NOT EDIT\n")
+        f.write("# onepkg lock file - DO NOT EDIT\n")
         f.write(f"# Generated from: {manifest_path}\n")
         f.write(f"# Packages: {total_locked}\n\n")
         yaml.dump(lock_data, f, default_flow_style=False, sort_keys=False)
@@ -1503,36 +1503,36 @@ def completions(
     pkg_types = list(MANAGERS.keys()) + ["custom"]
 
     if shell_type == "bash":
-        script = f'''# pkgmanager bash completion
-_pkgmanager() {{
+        script = f'''# onepkg bash completion
+_onepkg() {{
     local cur prev
     COMPREPLY=()
     cur="${{COMP_WORDS[COMP_CWORD]}}"
     prev="${{COMP_WORDS[COMP_CWORD-1]}}"
     case "${{prev}}" in
-        pkgmanager) COMPREPLY=( $(compgen -W "{" ".join(commands)}" -- "${{cur}}") );;
+        onepkg) COMPREPLY=( $(compgen -W "{" ".join(commands)}" -- "${{cur}}") );;
         install) COMPREPLY=( $(compgen -W "{" ".join(pkg_types)}" -- "${{cur}}") );;
     esac
 }}
-complete -F _pkgmanager pkgmanager
+complete -F _onepkg onepkg
 '''
     elif shell_type == "zsh":
-        script = """#compdef pkgmanager
-_pkgmanager() {
+        script = """#compdef onepkg
+_onepkg() {
     local -a commands
     commands=(init sync install remove list update status diff export lock bootstrap show edit search doctor outdated clean completions)
     _arguments '1: :->cmd' '*: :->args'
     case $state in cmd) _describe 'command' commands;; esac
 }
-_pkgmanager "$@"
+_onepkg "$@"
 """
     elif shell_type == "fish":
-        script = f"""# pkgmanager fish completion
+        script = f"""# onepkg fish completion
 set -l commands {" ".join(commands)}
 set -l types {" ".join(pkg_types)}
-complete -c pkgmanager -f
-complete -c pkgmanager -n "not __fish_seen_subcommand_from $commands" -a "$commands"
-complete -c pkgmanager -n "__fish_seen_subcommand_from install" -a "$types"
+complete -c onepkg -f
+complete -c onepkg -n "not __fish_seen_subcommand_from $commands" -a "$commands"
+complete -c onepkg -n "__fish_seen_subcommand_from install" -a "$types"
 """
     else:
         console.print(f"[red]Error:[/] Unknown shell: {shell_type}")

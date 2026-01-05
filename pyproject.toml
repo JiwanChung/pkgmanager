@@ -1,5 +1,5 @@
 [project]
-name = "pkgmanager"
+name = "onepkg"
 version = "0.6.0"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -8,7 +8,7 @@ dependencies = [
     "cyclopts>=3.20.0",
     "rich>=13.0.0",
 ]
-description = "Unified package manager for conda, python (uv), and rust (cargo)"
+description = "One manager to manage them all - unified CLI for brew, cargo, uv, go, and more"
 
 [project.optional-dependencies]
 dev = [
@@ -18,10 +18,10 @@ dev = [
 ]
 
 [project.scripts]
-pkgmanager = "pkgmanager.cli:main"
+onepkg = "onepkg.cli:main"
 
 [tool.setuptools.package-data]
-pkgmanager = ["specs.yaml"]
+onepkg = ["specs.yaml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

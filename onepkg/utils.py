@@ -1,4 +1,4 @@
-"""Utility functions for pkgmanager."""
+"""Utility functions for onepkg."""
 
 import os
 import shutil

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import yaml
 
-from pkgmanager.manifest import (
+from onepkg.manifest import (
     parse_package_entry,
     parse_custom_entry,
     package_in_list,
@@ -15,9 +15,9 @@ from pkgmanager.manifest import (
     resolve_package_manager,
     resolve_all_packages,
 )
-from pkgmanager.utils import platform_matches
-from pkgmanager.models import CustomPackageConfig
-from pkgmanager.managers import CUSTOM_MANAGER
+from onepkg.utils import platform_matches
+from onepkg.models import CustomPackageConfig
+from onepkg.managers import CUSTOM_MANAGER
 
 # Aliases for compatibility with existing tests
 _parse_package_entry = parse_package_entry

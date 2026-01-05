@@ -1,1 +1,1 @@
-# pkgmanager tests
+# onepkg tests

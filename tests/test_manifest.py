@@ -7,13 +7,13 @@ from pathlib import Path
 
 import yaml
 
-from pkgmanager.manifest import (
+from onepkg.manifest import (
     load_manifest,
     save_manifest,
     update_raw_manifest,
     get_category_for_type,
 )
-from pkgmanager.managers import CATEGORIES
+from onepkg.managers import CATEGORIES
 
 # Aliases for compatibility with existing tests
 _load_manifest = load_manifest
